@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+
+        .success {
+            color: green;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Formulário de Cadastro</h1>
+    <form id="registrationForm">
+        <div class="form-group">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required>
+            <span class="error" id="nameError"></span>
+        </div>
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
+            <span class="error" id="emailError"></span>
+        </div>
+        <div class="form-group">
+            <label for="confirmEmail">Confirme o E-mail:</label>
+            <input type="email" id="confirmEmail" name="confirmEmail" required>
+            <span class="error" id="confirmEmailError"></span>
+        </div>
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+            <span class="error" id="passwordError"></span>
+        </div>
+        <div class="form-group">
+            <button type="submit">Cadastrar</button>
+        </div>
+    </form>
+    <p class="success" id="successMessage" style="display: none;">Cadastro realizado com sucesso!</p>
+
+    <script>
+        const form = document.getElementById('registrationForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const confirmEmailInput = document.getElementById('confirmEmail');
+        const passwordInput = document.getElementById('password');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            clearErrors();
+
+            let isValid = true;
+
+            // Validação de campos obrigatórios
+            if (!nameInput.value.trim()) {
+                showError('nameError', 'Nome é obrigatório.');
+                isValid = false;
+            }
+
+            if (!emailInput.value.trim()) {
+                showError('emailError', 'E-mail é obrigatório.');
+                isValid = false;
+            }
+
+            if (!confirmEmailInput.value.trim()) {
+                showError('confirmEmailError', 'Confirmação de e-mail é obrigatória.');
+                isValid = false;
+            }
+
+            if (!passwordInput.value.trim()) {
+                showError('passwordError', 'Senha é obrigatória.');
+                isValid = false;
+            }
+
+            // Validação de e-mails iguais
+            if (emailInput.value !== confirmEmailInput.value) {
+                showError('confirmEmailError', 'Os e-mails não coincidem.');
+                isValid = false;
+            }
+
+            // Validação de senha forte
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(passwordInput.value)) {
+                showError('passwordError', 'A senha deve ter no mínimo 8 caracteres, 1 letra maiúscula e 1 número.');
+                isValid = false;
+            }
+
+            // Se tudo estiver válido, exibe mensagem de sucesso
+            if (isValid) {
+                successMessage.style.display = 'block';
+            }
+        });
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+
+        function clearErrors() {
+            const errors = document.querySelectorAll('.error');
+            errors.forEach(error => error.textContent = '');
+            successMessage.style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
