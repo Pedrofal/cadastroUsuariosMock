@@ -49,12 +49,12 @@
         </div>
         <div class="form-group">
             <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email">
+            <input type="text" id="email" name="email">
             <span class="error" id="emailError"></span>
         </div>
         <div class="form-group">
             <label for="confirmEmail">Confirme o E-mail:</label>
-            <input type="email" id="confirmEmail" name="confirmEmail">
+            <input type="text" id="confirmEmail" name="confirmEmail">
             <span class="error" id="confirmEmailError"></span>
         </div>
         <div class="form-group">
@@ -88,24 +88,25 @@
                 isValid = false;
             }
 
+            // Validação de e-mail personalizado
             if (!emailInput.value.trim()) {
                 showError('emailError', 'E-mail é obrigatório.');
+                isValid = false;
+            } else if (!isValidEmail(emailInput.value)) {
+                showError('emailError', 'E-mail inválido.');
                 isValid = false;
             }
 
             if (!confirmEmailInput.value.trim()) {
                 showError('confirmEmailError', 'Confirmação de e-mail é obrigatória.');
                 isValid = false;
+            } else if (emailInput.value !== confirmEmailInput.value) {
+                showError('confirmEmailError', 'Os e-mails não coincidem.');
+                isValid = false;
             }
 
             if (!passwordInput.value.trim()) {
                 showError('passwordError', 'Senha é obrigatória.');
-                isValid = false;
-            }
-
-            // Validação de e-mails iguais
-            if (emailInput.value !== confirmEmailInput.value) {
-                showError('confirmEmailError', 'Os e-mails não coincidem.');
                 isValid = false;
             }
 
@@ -130,6 +131,12 @@
             const errors = document.querySelectorAll('.error');
             errors.forEach(error => error.textContent = '');
             successMessage.style.display = 'none';
+        }
+
+        // Função para validar o formato de e-mail
+        function isValidEmail(email) {
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            return emailRegex.test(email);
         }
     </script>
 </body>
